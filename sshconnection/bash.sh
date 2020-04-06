@@ -1,0 +1,2 @@
+#mkdir sai
+start firefox
