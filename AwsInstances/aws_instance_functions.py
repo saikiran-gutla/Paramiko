@@ -1,8 +1,11 @@
 import boto3
+from AwsLoggers.aws_loggers import get_logger
 
 session = boto3.Session(profile_name='dev')
 ec2 = session.client('ec2')
 client = session.resource('ec2')
+
+__mylogger = get_logger('aws instance functions')
 
 
 def start_instance(instance_id):
@@ -14,10 +17,10 @@ def start_instance(instance_id):
     Returns:
 
     """
-    print('Starting the instance')
+    __mylogger.info('Starting the instance')
     ec2.start_instances(InstanceIds=[instance_id])
     waiter = ec2.get_waiter('instance_running')
-    print('Instance is running now')
+    __mylogger.info('Instance is running now')
     return waiter
 
 
@@ -62,3 +65,9 @@ def get_instance_status(instance_id):
     else:
         status = False
     return status
+
+
+def wait_until_instance_running(instance_id):
+    instance = client.Instance(instance_id)
+    instance.wait_until_running()
+    __mylogger.info(f'Instance is running Now : {instance_id}')
