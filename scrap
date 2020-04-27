@@ -1,0 +1,19 @@
+# "powershell Start-Process -NoNewWindow powershell ./npp.ps1",
+# "powershell Start-Process -NoNewWindow powershell ./chrome.ps1",
+# "powershell Invoke-WmiMethod -Class Win32_Process -Name Create -ArgumentList 'firefox.exe'",
+#        r'powershell Start-Process notepad++.exe "C:\ProgramFiles(x86)\Notepad++\"',
+#        'powershell ./open.ps1', "powershell Get-Process"
+#  r"powershell Start-Process -FilePath 'C:\Users\\testlab\Downloads\vlc-2.2.3-win32.exe' -ArgumentList /S, /v, /qn"
+
+'tasklist', 'start firefox',
+       'powershell stop-process -Name chrome', 'tasklist',
+       'powershell Start-Process -FilePath notepad++ -PassThru -Wait -Verb RunAs -WindowStyle Maximized', 'powershell Get-Service notepad++'
+
+powershell ./installexe.bat C:\Users\testlab\Downloads\Slack.exe  #installs the software that is specified
+
+
+# host = '10.2.10.106'
+# user_name = 'testlab'
+# password = 'Automox2016'
+# cmd = ["powershell cd /; mkdir tmp ; cd tmp "]
+# execute_commands(host, user_name, password, cmd)

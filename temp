@@ -1,0 +1,43 @@
+import os
+
+import boto3
+from botocore.exceptions import NoCredentialsError, ClientError
+
+print(os.getcwd())
+base_path = os.getcwd()
+installer_file_names = []
+for entry in os.listdir(base_path):
+    if os.path.isfile(os.path.join(base_path, entry)):
+        if entry[-3:] == 'dmg':
+            installer_file_names.append(entry)
+        print(entry)
+print(installer_file_names)
+
+
+def upload_file_to_bucket(file_name, bucket_name, s3_file_name_in_bucket=None):
+    """
+    Args:
+        file_name: Name of the file to upload
+        bucket_name: Name of the S3 Bucket to upload
+        s3_file_name_in_bucket: Name should be keep for the file in s3Bucket.
+    Returns:
+    """
+    s3 = boto3.client('s3')
+    if s3_file_name_in_bucket is None:
+        s3_file_name_in_bucket = file_name
+    try:
+        print(f"File Name : {file_name} \n"
+              f"File Name in S3 Bucket: {s3_file_name_in_bucket}\n"
+              f"File Size : {os.path.getsize(file_name)} bytes\n"
+              f"Uploading to Bucket: {bucket_name}")
+        s3.upload_file(file_name, bucket_name, 'third_party' + '/' + 'Win' + '/' + s3_file_name_in_bucket)
+        print(f"\n Finished Uploading the file : {file_name}")
+    except FileNotFoundError:
+        print("The file was not found")
+        return False
+    except NoCredentialsError:
+        print("Credentials not available")
+        return False
+    except ClientError:
+        print("Error Logging into aws")
+        return False
