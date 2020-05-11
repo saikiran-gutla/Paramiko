@@ -11,7 +11,8 @@ class CreateInstance:
                                                "win10-thirdparty-32bitsw": "ami-0e6441f96b704c5bf",
                                                "win8-thirdparty": "ami-045031c25d8840f0d",
                                                "Win10-Thirdpartysw": "ami-0b4e20a007e91f10e",
-                                               "Win12-thirdparty": "ami-058a8402ffa640a23"}
+                                               "Win12-thirdparty": "ami-058a8402ffa640a23",
+                                               "Rhat End to End" : "ami-0eb06b646ddf47b94"}
         vpc_type = {"stg": "vpc-37f7184e", "qe": "vpc-0447ab8cb096cc1f5"}
         subnet_type = {"stg": "subnet-05c7d6b54f3abf084", "qe": "subnet-0c28ef8cbffb780e6"}
         security_groups = {"stg": "sg-14de6468", "qe": "sg-0b789376e933c4fc8"}

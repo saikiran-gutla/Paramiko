@@ -5,12 +5,12 @@ from AwsInstances.aws_instance_functions import wait_until_instance_running
 from AwsLoggers.aws_loggers import get_logger
 
 
-def create_aws_instance(machines_to_create, realm):
+def create_aws_instance(machines_to_create, subnet):
     """
     This method will create instances based on the AMI names list provided
     Args:
         machines_to_create(list): List of machine names to create
-        realm: Realm name to create machines for
+        subnet: subnet name to create machines for
 
     Returns:
             Returns a list contains OsName,IpAddress,Username,Password.
@@ -29,8 +29,8 @@ def create_aws_instance(machines_to_create, realm):
     available_machines_to_create = []
     instance_overall_details = []
     wait_for_running = []
-    if realm not in ['stg', 'qe']:
-        __my_logger.error('realm not available')
+    if subnet not in ['stg', 'qe']:
+        __my_logger.error('subnet not available')
 
     for machine in machines_to_create:
         if machine not in available_end_to_end_machine_images.keys():
@@ -48,8 +48,8 @@ def create_aws_instance(machines_to_create, realm):
             MaxCount=1,
             InstanceType='t2.xlarge',
             KeyName='automation-dev',
-            SubnetId=subnet_type[realm],
-            SecurityGroupIds=[security_groups[realm]],
+            SubnetId=subnet_type[subnet],
+            SecurityGroupIds=[security_groups[subnet]],
             BlockDeviceMappings=[
                 {
                     'DeviceName': '/dev/sda1',
@@ -68,7 +68,7 @@ def create_aws_instance(machines_to_create, realm):
             USERNAME = 'Administrator'
             PASSWORD = 'Automox2016'
         # Name the instance created
-        name_of_instance = 'qa-ax-manual-' + realm + '-' + os_name + '-script'
+        name_of_instance = 'qa-ax-manual-' + subnet + '-' + os_name + '-script'
         wait_until_instance_details = []
         for instance in ec2.instances.all():
             if instance.id == response[0].id:

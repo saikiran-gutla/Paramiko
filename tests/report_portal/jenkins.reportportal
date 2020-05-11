@@ -1,0 +1,25 @@
+pipeline {
+  agent { label 'axtest-slave-qe' }
+  stages {
+    stage('setup_environment') {
+      steps {
+        sh '''/usr/local/bin/python3 -m venv awsenv
+              source awsenv/bin/activate
+              pip3 install -r requirements.txt
+           '''
+      }
+    }
+    stage('report_portal_to_sheets') {
+      steps {
+        sh '''
+              source awsenv/bin/activate
+              export PYTHONPATH=`pwd`
+              export BEARER_TOKEN='bd62f1f3-cb8c-48bc-aca5-5f577fe0352d'
+              export PROJECT_NAME='stg'
+              cd tests/report_portal
+              pytest -v -s test_report_portal.py
+           '''
+      }
+    }
+  }
+}

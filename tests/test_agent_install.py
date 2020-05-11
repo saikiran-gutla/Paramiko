@@ -2,14 +2,13 @@ from AwsInstances.aws_create_instance import create_aws_instance
 from installation.install_agent import agent_install
 import pytest
 
-host_ip = '10.0.0.153'
+host_ip = '10.2.23.140'
 user_name = 'testlab'
 password = 'Automox2016'
 realm = 'stg'
-device_key = '412e3371-59c5-4c16-afff-814583ac78bf'
+device_key = '1b5f1713-5c66-4a07-998c-99748c6df105'
 
 
-@pytest.mark.xfail(run=False)
 @pytest.mark.install_agent
 def test_install_agent():
     """
@@ -25,5 +24,3 @@ def test_install_agent():
 
     """
     agent_install(host_ip, user_name, password, realm, device_key)
-    pytest.xfail('This Script is not required to run. Skipping this test')
-# E           paramiko.ssh_exception.AuthenticationException: Authentication failed.

@@ -17,3 +17,72 @@ powershell ./installexe.bat C:\Users\testlab\Downloads\Slack.exe  #installs the 
 # password = 'Automox2016'
 # cmd = ["powershell cd /; mkdir tmp ; cd tmp "]
 # execute_commands(host, user_name, password, cmd)
+
+
+
+import requests
+from tests.report_portal.save_data_to_sheets import save_to_test_cases_sheet, \
+    save_to_sheet_test_suit_names
+from AwsLoggers.aws_loggers import get_logger
+import pytest
+
+__mylogger = get_logger('Report Portal')
+project = 'stg'
+bearer_token = 'bd62f1f3-cb8c-48bc-aca5-5f577fe0352d'
+params = {
+    'Authorization': 'bearer ' + bearer_token,
+    'Accept': 'application/json'
+}
+
+
+# @pytest.mark.fetch_test_cases
+# def test_report_portal_fetch_data():
+launches_url = 'http://10.0.0.170:8080/api/v1/' + project + '/launch'
+try:
+    response = requests.get(url=launches_url, headers=params)
+    data = response.json()
+except ConnectionError:
+    __mylogger.error(f"VPN is not connected")
+report_portal_sheet_data = []
+test_cases_data = []
+
+for launch in data['content']:
+    statistics_executions = launch['statistics']['executions']
+    statistics_defects = launch['statistics']['defects']
+    # print(
+    #     f"Launch Name : {launch['name']} \t Status : {launch['status']} \t Total Statistics : {statistics_executions['total']}"
+    #     f"\tPassed : {statistics_executions['passed']} \t Failed : {statistics_executions['failed']} \t"
+    #     f"Skipped : {statistics_executions['skipped']},Product Bug : {statistics_defects['product_bug']['total']} \t"
+    #     f"Automation Bug : {statistics_defects['automation_bug']['total']} \t "
+    #     f"System Issue : {statistics_defects['system_issue']['total']} \t "
+    #     f"To Investigate {statistics_defects['to_investigate']['total']} \t"
+    #     f"No Defects : {statistics_defects['no_defect']['total']}")
+    report_portal_sheet_data.append(
+        [launch['name'], statistics_executions['total'], statistics_executions['passed'],
+         statistics_executions['failed'], statistics_executions['skipped'],
+         statistics_defects['product_bug']['total'],
+         statistics_defects['automation_bug']['total'],
+         statistics_defects['system_issue']['total'],
+         statistics_defects['to_investigate']['total'],
+         statistics_defects['no_defect']['total'],
+         launch['status']])
+    test_suit_name = launch['name']
+    test_cases_url = f'http://10.0.0.170:8080/api/v1/' + project + '/item?filter.eq.launch=' + str(launch['id'])
+    test_response = requests.get(url=test_cases_url, headers=params)
+    tests_data = test_response.json()
+    for test in tests_data['content']:
+        if '.py' not in test['name']:
+            __mylogger.info(
+                f"TEST CASE NAME : {test['name']} \t TEST SUIT NAME : {test_suit_name} STATUS : {test['status']}")
+            test_cases_data.append([str(test['name']), str(test_suit_name), test['status']])
+
+save_to_test_cases_sheet(test_cases_data)
+# save_to_sheet_test_suit_names(report_portal_sheet_data)
+
+
+@pytest.mark.testing
+def test_some():
+    url = 'http://10.0.0.170:8080/api/v1/stg/launches/5ea83abbbfe52300014ed6fa?page.page=1&page.size=500'
+    response = requests.get(url=url, headers=params)
+    data = response.json()
+    print(data)

@@ -17,10 +17,12 @@ __my_logger = get_logger("UI_tests")
 @pytest.mark.create_add_agent
 def test_create_instance_add_agent():
     # Instance Name Should be give as win8,win10,win12,win16
-    machines_to_create = ['win10', 'win12']
+    machines_to_create = ['win8', 'win10', 'win16']
+    subnet = 'qe'
     realm = 'stg'
-    machine_to_add = create_aws_instance(machines_to_create, realm)
-    device_key = '412e3371-59c5-4c16-afff-814583ac78bf'
+    machine_to_add = create_aws_instance(machines_to_create, subnet)
+    time.sleep(150)
+    device_key = '7061fed0-d08c-441d-9dfd-2cece8036e23'
     for instance in machine_to_add:
         agent_install(instance['ip_address'], instance['username'], instance['password'], realm, device_key)
 
@@ -115,7 +117,6 @@ def test_dashboard_page(login_page):
     wait.until(
         expected_conditions.presence_of_element_located((By.XPATH,
                                                          '//*[@id="settingTabUserProfile"]/div[2]/div[2]/div[1]')))
-
     driver.find_element(By.XPATH, '/html/body/div[1]/div[7]/div/div/div[2]/div/div/div[2]/div/ul/li[2]/a').click()
     time.sleep(20)
     return driver

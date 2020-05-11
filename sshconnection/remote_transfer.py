@@ -56,19 +56,20 @@ def upload_files_to_remote_device(host_name, user_name, password, bucket_name, u
             except FileNotFoundError:
                 print(f"file not found : {file_name}")
                 failed_uploading_files.append(file_name)
+        if len(failed_uploading_files) > 0:
+            print(f'Failed Files to Upload : {failed_uploading_files}\n'
+                  f'Make Sure File name is correct as per s3 bucket and file available in S3')
+        print(f"\nRemoving files from local machine")
     except FileNotFoundError:
         print(f'\nFailed Uploading File: {file_name}')
-    if len(failed_uploading_files) > 0:
-        print(f'Failed Files to Upload : {failed_uploading_files}\n'
-              f'Make Sure File name is correct as per s3 bucket and file available in S3')
-    print(f"\nRemoving files from local machine")
-    for file in upload_files:
-        try:
-            path = os.path.join(os.getcwd(), file)
-            os.remove(path=path)
-            print(f'{file} removed from Local system')
-        except FileNotFoundError:
-            print(f"File not found for removing {file}")
+    finally:
+        for file in upload_files:
+            try:
+                path = os.path.join(os.getcwd(), file)
+                os.remove(path=path)
+                print(f'{file} removed from Local system')
+            except FileNotFoundError:
+                print(f"File not found for removing {file}")
 
 
 # The Below Method is not emergency now keeping it side
