@@ -13,9 +13,20 @@ def ssh_connect(host_name, user_name, password):
     except paramiko.AuthenticationException:
         print("Invalid Login Credentials")
         raise
-    # finally:
-    #     if ssh:
-    #         ssh.close()
+    return ssh
+
+
+def shh_connect_linux(host_name, user_name, key_file_name):
+    ssh = None
+    try:
+        ssh = paramiko.SSHClient()
+        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        print('Connecting to host : ' + host_name)
+        ssh.connect(hostname=host_name, username=user_name, key_filename=key_file_name)
+        print('Connected to host  : ' + host_name)
+    except paramiko.AuthenticationException:
+        print("Invalid Login Credentials")
+        raise
     return ssh
 
 
@@ -31,7 +42,7 @@ def execute_command(host_name, user_name, password, cmd):
     return stdin, stdout, stderr, ssh
 
 
-def execute_commands(host_name, user_name, password, cmds):
+def execute_commands(ssh, cmds):
     """
     This Method executes the commands passed in the list
     Args:
@@ -44,7 +55,7 @@ def execute_commands(host_name, user_name, password, cmds):
         Returns STDIN,STDOUT,STDERROR after exxecuting the commands
 
     """
-    ssh = ssh_connect(host_name=host_name, user_name=user_name, password=password)
+    # ssh = ssh_connect(host_name=host_name, user_name=user_name, password=password)
     for command in cmds:
         print(f"Executing Command :{command}")
         time.sleep(5)

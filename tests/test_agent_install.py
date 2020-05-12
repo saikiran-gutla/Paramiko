@@ -2,6 +2,8 @@ from AwsInstances.aws_create_instance import create_aws_instance
 from installation.install_agent import agent_install
 import pytest
 
+from sshconnection.connect_remote import execute_commands
+
 host_ip = '10.2.23.140'
 user_name = 'testlab'
 password = 'Automox2016'
@@ -24,3 +26,4 @@ def test_install_agent():
 
     """
     agent_install(host_ip, user_name, password, realm, device_key)
+

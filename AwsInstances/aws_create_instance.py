@@ -72,7 +72,7 @@ def create_aws_instance(machines_to_create, subnet):
         wait_until_instance_details = []
         for instance in ec2.instances.all():
             if instance.id == response[0].id:
-                __my_logger.info("INSTANCE ID: %s \tIP ADDRESS : %s \t INSTANCE NAME : %s",
+                __my_logger.info("\nINSTANCE ID: %s \tIP ADDRESS : %s \t INSTANCE NAME : %s",
                                  response[0].id, instance.private_ip_address, name_of_instance)
                 wait_for_running.append(instance.id)
                 if os_name in ['win8', 'win10']:

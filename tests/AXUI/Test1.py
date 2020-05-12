@@ -17,12 +17,12 @@ __my_logger = get_logger("UI_tests")
 @pytest.mark.create_add_agent
 def test_create_instance_add_agent():
     # Instance Name Should be give as win8,win10,win12,win16
-    machines_to_create = ['win8', 'win10', 'win16']
+    machines_to_create = ['win10']
     subnet = 'qe'
     realm = 'stg'
     machine_to_add = create_aws_instance(machines_to_create, subnet)
     time.sleep(150)
-    device_key = '7061fed0-d08c-441d-9dfd-2cece8036e23'
+    device_key = 'b274e727-d8a9-440f-9c2d-ae7d9d41c37c'
     for instance in machine_to_add:
         agent_install(instance['ip_address'], instance['username'], instance['password'], realm, device_key)
 
