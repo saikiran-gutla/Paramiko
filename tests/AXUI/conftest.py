@@ -11,7 +11,7 @@ my_logger = get_logger("UI_tests")
 user_name = 'mark@patchsimple.com'
 user_pass = 'markmark'
 REALM = 'stg'
-org_id = 18722
+org_id = 19604
 
 
 @pytest.fixture(name="setUp", scope='session')

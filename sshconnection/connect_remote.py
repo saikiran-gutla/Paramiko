@@ -42,7 +42,7 @@ def execute_command(host_name, user_name, password, cmd):
     return stdin, stdout, stderr, ssh
 
 
-def execute_commands(ssh, cmds):
+def execute_commands(host_name, user_name, password, cmds):
     """
     This Method executes the commands passed in the list
     Args:
@@ -55,7 +55,7 @@ def execute_commands(ssh, cmds):
         Returns STDIN,STDOUT,STDERROR after exxecuting the commands
 
     """
-    # ssh = ssh_connect(host_name=host_name, user_name=user_name, password=password)
+    ssh = ssh_connect(host_name=host_name, user_name=user_name, password=password)
     for command in cmds:
         print(f"Executing Command :{command}")
         time.sleep(5)
@@ -67,3 +67,7 @@ def execute_commands(ssh, cmds):
         for i in st:
             print(i)
     return ssh
+
+
+[{'osname': 'win10', 'ip_address': '10.2.26.42', 'username': 'testlab', 'password': 'Automox2016'},
+ {'osname': 'win12', 'ip_address': '10.2.29.250', 'username': 'Administrator', 'password': 'Automox2016'}]

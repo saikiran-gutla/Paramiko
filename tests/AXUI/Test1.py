@@ -17,12 +17,16 @@ __my_logger = get_logger("UI_tests")
 @pytest.mark.create_add_agent
 def test_create_instance_add_agent():
     # Instance Name Should be give as win8,win10,win12,win16
-    machines_to_create = ['win10']
+    machines_to_create = ['win10', 'win12']
     subnet = 'qe'
     realm = 'stg'
-    machine_to_add = create_aws_instance(machines_to_create, subnet)
-    time.sleep(150)
-    device_key = 'b274e727-d8a9-440f-9c2d-ae7d9d41c37c'
+    # machine_to_add = create_aws_instance(machines_to_create, subnet)
+    machine_to_add = [{'osname': 'win10', 'ip_address': '10.2.26.42', 'username': 'testlab', 'password': 'Automox2016'},
+                      {'osname': 'win12', 'ip_address': '10.2.29.250', 'username': 'Administrator',
+                       'password': 'Automox2016'}]
+
+    # time.sleep(150)
+    device_key = 'e7993761-1006-4159-9755-fa372a3d502c'
     for instance in machine_to_add:
         agent_install(instance['ip_address'], instance['username'], instance['password'], realm, device_key)
 
