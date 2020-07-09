@@ -15,48 +15,25 @@ def test_revert_third_party_instances():
         # Stop the instance
         stop_instance(instance_id=instance_id)
 
-        # Get Volume state
-        volume_state = get_volume_state(instance_id=instance_id)
+    print('Instance is not running')
+    # Get Volume state
+    volume_state = get_volume_state(instance_id=instance_id)
 
-        # check volume is attached or not(if attached detach the volume)
-        if volume_state == 'attached':
-            volume_id = get_volume_id_of_instance(instance_id=instance_id)
-            # Detach volume
-            detach_volume(volume_id=volume_id)
+    # check volume is attached or not(if attached detach the volume)
+    if volume_state == 'attached':
+        volume_id = get_volume_id_of_instance(instance_id=instance_id)
+        # Detach volume
+        detach_volume(volume_id=volume_id)
+        
+        # Deleting the old Volume
+        delete_volume(volume_id)
+        print('Old volume removed')
 
-            # Create the volume from the snapshot
-            created_new_volume_id = create_new_volume(snapshot_id, volume_name)
+    # Create the volume from the snapshot
+    created_volume_id = create_new_volume(snapshot_id, volume_name)
 
-            # Attach the created volume
-            attach_volume(instance_id=instance_id, new_volume_id=created_new_volume_id)
+    # Attach the created volume
+    attach_volume(instance_id=instance_id, new_volume_id=created_volume_id)
 
-            # Deleting the old Volume
-            delete_volume(volume_id)
-            print('Old volume removed')
-
-            # Start the instance
-            start_instance(instance_id=instance_id)
-
-    else:
-        print('Instance is not running')
-        # Get Volume state
-        volume_state = get_volume_state(instance_id=instance_id)
-
-        # check volume is attached or not(if attached detach the volume)
-        if volume_state == 'attached':
-            volume_id = get_volume_id_of_instance(instance_id=instance_id)
-            # Detach volume
-            detach_volume(volume_id=volume_id)
-
-            # Create the volume from the snapshot
-            created_volume_id = create_new_volume(snapshot_id, volume_name)
-
-            # Attach the created volume
-            attach_volume(instance_id=instance_id, new_volume_id=created_volume_id)
-
-            # Deleting the old Volume
-            delete_volume(volume_id)
-            print('Old volume removed')
-
-            # Start the instance
-            start_instance(instance_id=instance_id)
+    # Start the instance
+    start_instance(instance_id=instance_id)
